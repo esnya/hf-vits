@@ -30,9 +30,9 @@ This implementation requires Python 3.10. Please ensure you have the correct Pyt
 To use the hf-vits model, import the necessary modules and load the pre-trained model:
 
 ```python
-from transformers import VitsPreprocessor, VitsForTextToSpeech
+from hf_vits import VitsTokenizer, VitsForTextToSpeech
 
-tokenizer = VitsPreprocessor.from_pretrained("your-pretrained-model")
+tokenizer = VitsTokenizer.from_pretrained("your-pretrained-model")
 model = VitsForTextToSpeech.from_pretrained("your-pretrained-model")
 ```
 
@@ -40,10 +40,13 @@ Then, synthesize speech with the following code:
 
 ```python
 text = "VITS is awesome."
-input_ids = tokenizer(text, return_tensors="pt").input_ids
-generated_audio = model.generate(input_ids)
+inputs = tokenizer(text, return_tensors="pt").to(device)
+generated_audio = model.generate(**inputs)
 ```
 
+## Attribution
+
+The code in hf_vits/models/utils and most of VitsForTextToSpeech is based on the original implementation published under the MIT License Copyright (c) 2023 liujing04. The code has been slightly modified by esnya.
 
 ## License
 
