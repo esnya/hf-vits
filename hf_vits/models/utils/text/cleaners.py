@@ -1,6 +1,5 @@
-""" from https://github.com/keithito/tacotron """
+""" from https://github.com/keithito/tacotron
 
-"""
 Cleaners are transformations that run over the input text at both training and eval time.
 
 Cleaners can be selected by passing a comma-delimited list of cleaner names as the "cleaners"
@@ -54,8 +53,8 @@ def expand_abbreviations(text):
     return text
 
 
-def expand_numbers(text):
-    return normalize_numbers(text)
+# def expand_numbers(text):
+#     return normalize_numbers(text)
 
 
 def lowercase(text):

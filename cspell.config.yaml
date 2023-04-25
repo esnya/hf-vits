@@ -8,6 +8,7 @@ words:
   - convs
   - Elementwise
   - encdec
+  - espeak
   - fmap
   - gelu
   - Jaehyeon
@@ -19,7 +20,10 @@ words:
   - logsigmoid
   - logw
   - LRELU
+  - misess
   - padd
+  - phonemize
+  - phonemizer
   - randn
   - relu
   - resblock
@@ -27,6 +31,7 @@ words:
   - softmax
   - tril
   - triu
+  - unidecode
   - unsqueeze
   - upsample
   - upsamples

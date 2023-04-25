@@ -58,6 +58,7 @@ class VitsForTextToSpeech(PreTrainedModel):
         self.segment_size = config.segment_size
         self.n_speakers = config.n_speakers
         self.gin_channels = config.gin_channels
+        self.sampling_rate = config.sampling_rate
 
         self.use_sdp = config.use_sdp
 
@@ -113,8 +114,15 @@ class VitsForTextToSpeech(PreTrainedModel):
 
         self.post_init()
 
-    def forward(self, x, x_lengths, y, y_lengths, sid=None):
-        x, m_p, logs_p, x_mask = self.enc_p(x, x_lengths)
+    def forward(
+        self,
+        input_ids: torch.Tensor,
+        input_lengths: torch.Tensor,
+        y,
+        y_lengths,
+        sid=None,
+    ):
+        input_ids, m_p, logs_p, x_mask = self.enc_p(input_ids, input_lengths)
         if self.n_speakers > 0:
             g = self.emb_g(sid).unsqueeze(-1)  # [b, h, 1]
         else:
@@ -149,11 +157,11 @@ class VitsForTextToSpeech(PreTrainedModel):
 
         w = attn.sum(2)
         if self.use_sdp:
-            l_length = self.dp(x, x_mask, w, g=g)
+            l_length = self.dp(input_ids, x_mask, w, g=g)
             l_length = l_length / torch.sum(x_mask)
         else:
             logw_ = torch.log(w + 1e-6) * x_mask
-            logw = self.dp(x, x_mask, g=g)
+            logw = self.dp(input_ids, x_mask, g=g)
             l_length = torch.sum((logw - logw_) ** 2, [1, 2]) / torch.sum(
                 x_mask
             )  # for averaging
@@ -176,26 +184,29 @@ class VitsForTextToSpeech(PreTrainedModel):
             (z, z_p, m_p, logs_p, m_q, logs_q),
         )
 
-    def infer(
+    def generate(
         self,
-        x,
-        x_lengths,
+        input_ids: torch.Tensor,
+        input_lengths: torch.Tensor,
         sid=None,
         noise_scale=1.0,
         length_scale=1,
         noise_scale_w=1.0,
         max_len=None,
+        **kwargs,
     ):
-        x, m_p, logs_p, x_mask = self.enc_p(x, x_lengths)
+        input_ids, m_p, logs_p, x_mask = self.enc_p(input_ids, input_lengths)
         if self.n_speakers > 0:
             g = self.emb_g(sid).unsqueeze(-1)  # [b, h, 1]
         else:
             g = None
 
         if self.use_sdp:
-            logw = self.dp(x, x_mask, g=g, reverse=True, noise_scale=noise_scale_w)
+            logw = self.dp(
+                input_ids, x_mask, g=g, reverse=True, noise_scale=noise_scale_w
+            )
         else:
-            logw = self.dp(x, x_mask, g=g)
+            logw = self.dp(input_ids, x_mask, g=g)
         w = torch.exp(logw) * x_mask * length_scale
         w_ceil = torch.ceil(w)
         y_lengths = torch.clamp_min(torch.sum(w_ceil, [1, 2]), 1).long()

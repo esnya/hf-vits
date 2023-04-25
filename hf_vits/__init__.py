@@ -1,3 +1,3 @@
-from .models import VitsConfig, VitsForTextToSpeech
+from .models import VitsConfig, VitsForTextToSpeech, VitsTokenizer
 
-__all__ = ["VitsConfig", "VitsForTextToSpeech"]
+__all__ = ["VitsConfig", "VitsForTextToSpeech", "VitsTokenizer"]

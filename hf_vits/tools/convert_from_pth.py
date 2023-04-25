@@ -3,8 +3,10 @@ from os import PathLike
 
 import torch
 
+from hf_vits.models.tokenization_vits import VitsTokenizer
+
 from ..models.configuration_vits import VitsConfig
-from ..models.modeling_vits_synthesizer import VitsForTextToSpeech
+from ..models.modeling_vits import VitsForTextToSpeech
 
 logger = logging.getLogger(__name__)
 
@@ -74,8 +76,12 @@ def convert_from_pth(
     logger.info("Saving model to %s", save_directory)
     model.save_pretrained(save_directory, safe_serialization=safe_serialization)
 
+    logger.info("Saving tokenizer to %s", save_directory)
+    VitsTokenizer(**config.to_dict()).save_pretrained(save_directory)
+
     logger.info("Testing saved model")
     VitsForTextToSpeech.from_pretrained(save_directory)
+    VitsTokenizer.from_pretrained(save_directory)
 
 
 if __name__ == "__main__":
