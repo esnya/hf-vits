@@ -1,0 +1,35 @@
+version: "0.2"
+ignorePaths: []
+dictionaryDefinitions: []
+dictionaries: []
+words:
+  - arange
+  - Autoencoder
+  - convs
+  - Elementwise
+  - encdec
+  - fmap
+  - gelu
+  - Jaehyeon
+  - Juhee
+  - Jungil
+  - keepdim
+  - logdet
+  - logq
+  - logsigmoid
+  - logw
+  - LRELU
+  - padd
+  - randn
+  - relu
+  - resblock
+  - resblocks
+  - softmax
+  - tril
+  - triu
+  - unsqueeze
+  - upsample
+  - upsamples
+  - vflow
+ignoreWords: []
+import: []
