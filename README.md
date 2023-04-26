@@ -1,6 +1,8 @@
 HF VITS: VITS Implementation in HuggingFace Transformers
 ----
 
+**[WIP] Working in progress now. Only works for text to speech evaluation now.**
+
 This repository contains the implementation of the VITS model using the Hugging Face Transformers library. VITS (Conditional Variational Autoencoder with Adversarial Learning for End-to-End Text-to-Speech) is a state-of-the-art end-to-end Text-to-Speech (TTS) model that generates more natural-sounding audio than current two-stage models.
 
 ## Overview
