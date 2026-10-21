@@ -17,6 +17,7 @@ safetensors = "*"
 torch = {version = "*", index = "downloadpytorch"}
 transformers = "*"
 Unidecode = "*"
+certifi = ">=2026.10.19"
 
 [dev-packages]
 bandit = "*"
